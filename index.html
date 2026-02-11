@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Валентинка</title>
+
+<!-- Cinzel -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+body {
+  margin:0;
+  padding:40px;
+  font-family:'Cinzel', serif;
+  background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
+}
+
+/* стеклянная форма */
+.form-wrapper {
+  width:500px;
+  padding:25px;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,0.2);
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(0,0,0,0.2);
+}
+
+input, textarea, select {
+  width:100%;
+  margin-bottom:15px;
+  padding:8px;
+  font-family:'Cinzel', serif;
+}
+
+textarea {
+  resize:vertical;
+  min-height:80px;
+  max-height:200px;
+}
+
+.preview {
+  width:600px;
+  height:600px;
+  background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-left:40px;
+}
+
+.heart {
+  width:300px;
+  height:270px;
+  position:relative;
+  transform:rotate(-45deg);
+}
+
+.heart::before,
+.heart::after {
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:inherit;
+  border-radius:50%;
+}
+
+.heart::before {
+  top:-150px;
+  left:0;
+}
+
+.heart::after {
+  left:150px;
+  top:0;
+}
+
+.heart-text {
+  position:absolute;
+  width:100%;
+  height:100%;
+  transform:rotate(45deg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  color:white;
+}
+
+.container {
+  display:flex;
+}
+
+button {
+  display:block;
+  margin:20px auto 0;
+  padding:10px 25px;
+  font-family:'Cinzel', serif;
+  cursor:pointer;
+}
+
+.color-option {
+  display:flex;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.color-box {
+  width:20px;
+  height:20px;
+  margin-right:10px;
+  border:1px solid #000;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="form-wrapper">
+
+<label>Кому (имя + ссылка)</label>
+<input type="text" id="toName" placeholder="Имя">
+<input type="text" id="toLink" placeholder="Ссылка на профиль">
+
+<label>
+<input type="checkbox" id="anonymous"> Анонимно
+</label>
+
+<label>От кого</label>
+<input type="text" id="fromName">
+
+<label>Пожелание</label>
+<textarea id="message"></textarea>
+
+<label>Цвет валентинки</label>
+
+<div class="color-option">
+<input type="radio" name="color" value="#CD4A4C" checked>
+<div class="color-box" style="background:#CD4A4C;"></div>
+</div>
+
+<div class="color-option">
+<input type="radio" name="color" value="#8B0000">
+<div class="color-box" style="background:#8B0000;"></div>
+</div>
+
+<label>Шрифт</label>
+<select id="font">
+<option value="'Cinzel', serif" style="font-family:'Cinzel'">Cinzel</option>
+<option value="Georgia, serif" style="font-family:Georgia">Georgia</option>
+<option value="Times New Roman, serif" style="font-family:'Times New Roman'">Times New Roman</option>
+</select>
+
+<button onclick="generate()">Упаковать Валентинку</button>
+
+</div>
+
+<div class="preview" id="preview">
+</div>
+
+</div>
+
+<script>
+
+(function(){
+emailjs.init("YOUR_PUBLIC_KEY");
+})();
+
+document.getElementById("anonymous").addEventListener("change", function(){
+document.getElementById("fromName").disabled = this.checked;
+});
+
+function generate(){
+
+let toName = document.getElementById("toName").value;
+let toLink = document.getElementById("toLink").value;
+let fromName = document.getElementById("anonymous").checked ? "Аноним" : document.getElementById("fromName").value;
+let message = document.getElementById("message").value;
+let color = document.querySelector('input[name="color"]:checked').value;
+let font = document.getElementById("font").value;
+
+let htmlCode = `
+[html]
+<style>
+.valentine{
+width:600px;
+height:600px;
+background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:${font};
+text-align:center;
+}
+.heart{
+width:300px;
+height:270px;
+position:relative;
+background:${color};
+transform:rotate(-45deg);
+}
+.heart:before,
+.heart:after{
+content:"";
+position:absolute;
+width:300px;
+height:300px;
+background:${color};
+border-radius:50%;
+}
+.heart:before{top:-150px;}
+.heart:after{left:150px;}
+.heart-text{
+position:absolute;
+width:100%;
+height:100%;
+transform:rotate(45deg);
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+color:#fff;
+}
+</style>
+<div class="valentine">
+<div class="heart">
+<div class="heart-text">
+<a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
+</div>
+</div>
+</div>
+[/html]
+`;
+
+document.getElementById("preview").innerHTML = `
+<div class="heart" style="background:${color}">
+<div class="heart-text" style="font-family:${font}">
+<a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
+</div>
+</div>
+`;
+
+emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+subject: fromName + " → " + toName,
+message: htmlCode
+});
+
+alert("Валентинка упакована и отправлена!");
+}
+
+</script>
+
+</body>
+</html>
