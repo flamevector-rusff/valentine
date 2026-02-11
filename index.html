@@ -17,7 +17,6 @@ body {
   background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
 }
 
-/* стеклянная форма */
 .form-wrapper {
   width:500px;
   padding:25px;
@@ -29,24 +28,23 @@ body {
 
 input, textarea, select {
   width:100%;
-  margin-bottom:15px;
+  margin-bottom:10px;
   padding:8px;
   font-family:'Cinzel', serif;
 }
 
 textarea {
-  resize:vertical;
-  min-height:80px;
-  max-height:200px;
+  resize:none; /* запрещаем изменение размера */
+  height:120px; /* увеличенная высота */
+  margin-bottom:5px;
+  padding:8px;
 }
 
-/* контейнер формы и превью */
 .container {
   display:flex;
   gap:40px;
 }
 
-/* превью валентинки */
 .preview {
   width:600px;
   height:600px;
@@ -54,41 +52,34 @@ textarea {
   display:flex;
   justify-content:center;
   align-items:center;
-  border:5px solid #000; /* жирная рамка для превью */
-}
-
-/* сердце */
-.heart {
-  width:300px;
-  height:270px;
+  border:5px solid #000;
+  overflow:hidden;
   position:relative;
-  transform:rotate(-45deg);
 }
 
-.heart::before,
-.heart::after {
-  content:"";
-  position:absolute;
-  width:300px;
-  height:300px;
-  background:inherit;
-  border-radius:50%;
-}
-
-.heart::before { top:-150px; left:0; }
-.heart::after { left:150px; top:0; }
-
-.heart-text {
-  position:absolute;
-  width:100%;
-  height:100%;
-  transform:rotate(45deg);
+/* корректное сердце через clip-path */
+.heart {
+  width:350px;
+  height:350px;
+  background: red; /* заменяется на выбранный цвет */
+  clip-path: path("M 175 30 C 175 -20 350 50 175 350 C 0 50 175 -20 175 30 Z");
+  position:relative;
   display:flex;
-  align-items:center;
   justify-content:center;
+  align-items:center;
+  padding:25px;
   text-align:center;
-  padding:20px;
   color:white;
+  font-size:20px;
+  line-height:1.2em;
+  overflow:hidden;
+}
+
+/* имя со ссылкой встроено в текст */
+.heart a {
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
 }
 
 button {
@@ -99,17 +90,31 @@ button {
   cursor:pointer;
 }
 
+/* чекбоксы и цвета в одну строку */
+.checkbox-row {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
 .color-option {
   display:flex;
   align-items:center;
-  margin-bottom:8px;
+  gap:5px;
 }
 
 .color-box {
   width:20px;
   height:20px;
-  margin-right:10px;
   border:1px solid #000;
+}
+
+.counter {
+  font-size:12px;
+  text-align:right;
+  margin-bottom:10px;
+  color:#333;
 }
 </style>
 </head>
@@ -124,50 +129,46 @@ button {
 <input type="text" id="toName" placeholder="Имя">
 <input type="text" id="toLink" placeholder="Ссылка на профиль">
 
-<!-- Анонимно над "От кого" -->
-<label style="display:flex; justify-content:space-between; align-items:center;">
-  Анонимно
-  <input type="checkbox" id="anonymous" style="margin-left:10px;">
-</label>
+<!-- Анонимно и чекбокс в одну строку -->
+<div class="checkbox-row">
+  <label for="anonymous">Анонимно</label>
+  <input type="checkbox" id="anonymous">
+</div>
 
 <label>От кого</label>
 <input type="text" id="fromName">
 
 <label>Пожелание</label>
-<textarea id="message"></textarea>
+<textarea id="message" maxlength="200" placeholder="Введите поздравление"></textarea>
+<div class="counter" id="charCount">0 / 200</div>
 
 <label>Цвет валентинки</label>
-
-<!-- Добавление новых цветов: просто скопируй этот блок -->
-<div class="color-option">
-  <input type="radio" name="color" value="#CD4A4C" checked>
-  <div class="color-box" style="background:#CD4A4C;"></div>
+<div class="checkbox-row">
+  <div class="color-option">
+    <input type="radio" name="color" value="#CD4A4C" checked>
+    <div class="color-box" style="background:#CD4A4C;"></div>
+  </div>
+  <div class="color-option">
+    <input type="radio" name="color" value="#8B0000">
+    <div class="color-box" style="background:#8B0000;"></div>
+  </div>
+  <!-- Добавляй новые цвета здесь -->
 </div>
-
-<div class="color-option">
-  <input type="radio" name="color" value="#8B0000">
-  <div class="color-box" style="background:#8B0000;"></div>
-</div>
-
-<!-- Добавляй новые цвета здесь -->
 
 <label>Шрифт</label>
 <select id="font">
   <option value="'Cinzel', serif" style="font-family:'Cinzel'">Cinzel</option>
   <option value="Georgia, serif" style="font-family:Georgia">Georgia</option>
   <option value="Times New Roman, serif" style="font-family:'Times New Roman'">Times New Roman</option>
-  <!-- Добавляй новые шрифты здесь (через github) -->
+  <!-- Добавляй новые шрифты здесь -->
 </select>
 
-<!-- Кнопки -->
 <button onclick="showPreview()">Посмотреть Валентинку</button>
 <button onclick="generate()">Упаковать Валентинку</button>
 
 </div>
 
-<div class="preview" id="preview">
-<!-- превью появится сюда -->
-</div>
+<div class="preview" id="preview"></div>
 
 </div>
 
@@ -180,34 +181,45 @@ document.getElementById("anonymous").addEventListener("change", function(){
   document.getElementById("fromName").disabled = this.checked;
 });
 
+// обновление счётчика символов (учитываем имя получателя)
+const messageEl = document.getElementById("message");
+const toNameEl = document.getElementById("toName");
+const charCount = document.getElementById("charCount");
+
+function updateCharCount(){
+  let nameLength = toNameEl.value.length;
+  let messageLength = messageEl.value.length;
+  charCount.textContent = `${nameLength + messageLength} / 200`;
+}
+
+messageEl.addEventListener("input", updateCharCount);
+toNameEl.addEventListener("input", updateCharCount);
+
 // функция предпросмотра
 function showPreview(){
-  let toName = document.getElementById("toName").value;
-  let toLink = document.getElementById("toLink").value;
-  let message = document.getElementById("message").value;
-  let color = document.querySelector('input[name="color"]:checked').value;
-  let font = document.getElementById("font").value;
+  const toName = toNameEl.value;
+  const toLink = document.getElementById("toLink").value;
+  const message = messageEl.value;
+  const color = document.querySelector('input[name="color"]:checked').value;
+  const font = document.getElementById("font").value;
 
   document.getElementById("preview").innerHTML = `
-  <div class="heart" style="background:${color}">
-    <div class="heart-text" style="font-family:${font}">
-      <a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
-    </div>
+  <div class="heart" style="background:${color}; font-family:${font}">
+    <span><a href="${toLink}">${toName}</a>, ${message.toLowerCase()}</span>
   </div>
   `;
 }
 
 // функция упаковки и отправки письма
 function generate(){
+  const toName = toNameEl.value;
+  const toLink = document.getElementById("toLink").value;
+  const fromName = document.getElementById("anonymous").checked ? "Аноним" : document.getElementById("fromName").value;
+  const message = messageEl.value;
+  const color = document.querySelector('input[name="color"]:checked').value;
+  const font = document.getElementById("font").value;
 
-  let toName = document.getElementById("toName").value;
-  let toLink = document.getElementById("toLink").value;
-  let fromName = document.getElementById("anonymous").checked ? "Аноним" : document.getElementById("fromName").value;
-  let message = document.getElementById("message").value;
-  let color = document.querySelector('input[name="color"]:checked').value;
-  let font = document.getElementById("font").value;
-
-  let htmlCode = `
+  const htmlCode = `
 [html]
 <style>
 .valentine{
@@ -221,46 +233,31 @@ font-family:${font};
 text-align:center;
 }
 .heart{
-width:300px;
-height:270px;
-position:relative;
+width:350px;
+height:350px;
 background:${color};
-transform:rotate(-45deg);
-}
-.heart:before,
-.heart:after{
-content:"";
-position:absolute;
-width:300px;
-height:300px;
-background:${color};
-border-radius:50%;
-}
-.heart:before{top:-150px;}
-.heart:after{left:150px;}
-.heart-text{
-position:absolute;
-width:100%;
-height:100%;
-transform:rotate(45deg);
+clip-path: path("M 175 30 C 175 -20 350 50 175 350 C 0 50 175 -20 175 30 Z");
 display:flex;
 align-items:center;
 justify-content:center;
-padding:20px;
-color:#fff;
+padding:25px;
+overflow:hidden;
+color:white;
+}
+.heart a{
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 </style>
 <div class="valentine">
 <div class="heart">
-<div class="heart-text">
-<a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
-</div>
+<a href="${toLink}">${toName}</a>, ${message.toLowerCase()}
 </div>
 </div>
 [/html]
 `;
 
-  // отправка через emailjs
   emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
     subject: fromName + " → " + toName,
     message: htmlCode
