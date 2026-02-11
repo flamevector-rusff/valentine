@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Валентинка</title>
 
-<!-- Cinzel -->
+<!-- Подключаем шрифты (можно подключать новые через github) -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -40,6 +40,13 @@ textarea {
   max-height:200px;
 }
 
+/* контейнер формы и превью */
+.container {
+  display:flex;
+  gap:40px;
+}
+
+/* превью валентинки */
 .preview {
   width:600px;
   height:600px;
@@ -47,9 +54,10 @@ textarea {
   display:flex;
   justify-content:center;
   align-items:center;
-  margin-left:40px;
+  border:5px solid #000; /* жирная рамка для превью */
 }
 
+/* сердце */
 .heart {
   width:300px;
   height:270px;
@@ -67,15 +75,8 @@ textarea {
   border-radius:50%;
 }
 
-.heart::before {
-  top:-150px;
-  left:0;
-}
-
-.heart::after {
-  left:150px;
-  top:0;
-}
+.heart::before { top:-150px; left:0; }
+.heart::after { left:150px; top:0; }
 
 .heart-text {
   position:absolute;
@@ -90,13 +91,9 @@ textarea {
   color:white;
 }
 
-.container {
-  display:flex;
-}
-
 button {
   display:block;
-  margin:20px auto 0;
+  margin:10px auto 0;
   padding:10px 25px;
   font-family:'Cinzel', serif;
   cursor:pointer;
@@ -127,8 +124,10 @@ button {
 <input type="text" id="toName" placeholder="Имя">
 <input type="text" id="toLink" placeholder="Ссылка на профиль">
 
-<label>
-<input type="checkbox" id="anonymous"> Анонимно
+<!-- Анонимно над "От кого" -->
+<label style="display:flex; justify-content:space-between; align-items:center;">
+  Анонимно
+  <input type="checkbox" id="anonymous" style="margin-left:10px;">
 </label>
 
 <label>От кого</label>
@@ -139,52 +138,76 @@ button {
 
 <label>Цвет валентинки</label>
 
+<!-- Добавление новых цветов: просто скопируй этот блок -->
 <div class="color-option">
-<input type="radio" name="color" value="#CD4A4C" checked>
-<div class="color-box" style="background:#CD4A4C;"></div>
+  <input type="radio" name="color" value="#CD4A4C" checked>
+  <div class="color-box" style="background:#CD4A4C;"></div>
 </div>
 
 <div class="color-option">
-<input type="radio" name="color" value="#8B0000">
-<div class="color-box" style="background:#8B0000;"></div>
+  <input type="radio" name="color" value="#8B0000">
+  <div class="color-box" style="background:#8B0000;"></div>
 </div>
+
+<!-- Добавляй новые цвета здесь -->
 
 <label>Шрифт</label>
 <select id="font">
-<option value="'Cinzel', serif" style="font-family:'Cinzel'">Cinzel</option>
-<option value="Georgia, serif" style="font-family:Georgia">Georgia</option>
-<option value="Times New Roman, serif" style="font-family:'Times New Roman'">Times New Roman</option>
+  <option value="'Cinzel', serif" style="font-family:'Cinzel'">Cinzel</option>
+  <option value="Georgia, serif" style="font-family:Georgia">Georgia</option>
+  <option value="Times New Roman, serif" style="font-family:'Times New Roman'">Times New Roman</option>
+  <!-- Добавляй новые шрифты здесь (через github) -->
 </select>
 
+<!-- Кнопки -->
+<button onclick="showPreview()">Посмотреть Валентинку</button>
 <button onclick="generate()">Упаковать Валентинку</button>
 
 </div>
 
 <div class="preview" id="preview">
+<!-- превью появится сюда -->
 </div>
 
 </div>
 
 <script>
-
 (function(){
 emailjs.init("YOUR_PUBLIC_KEY");
 })();
 
 document.getElementById("anonymous").addEventListener("change", function(){
-document.getElementById("fromName").disabled = this.checked;
+  document.getElementById("fromName").disabled = this.checked;
 });
 
+// функция предпросмотра
+function showPreview(){
+  let toName = document.getElementById("toName").value;
+  let toLink = document.getElementById("toLink").value;
+  let message = document.getElementById("message").value;
+  let color = document.querySelector('input[name="color"]:checked').value;
+  let font = document.getElementById("font").value;
+
+  document.getElementById("preview").innerHTML = `
+  <div class="heart" style="background:${color}">
+    <div class="heart-text" style="font-family:${font}">
+      <a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
+    </div>
+  </div>
+  `;
+}
+
+// функция упаковки и отправки письма
 function generate(){
 
-let toName = document.getElementById("toName").value;
-let toLink = document.getElementById("toLink").value;
-let fromName = document.getElementById("anonymous").checked ? "Аноним" : document.getElementById("fromName").value;
-let message = document.getElementById("message").value;
-let color = document.querySelector('input[name="color"]:checked').value;
-let font = document.getElementById("font").value;
+  let toName = document.getElementById("toName").value;
+  let toLink = document.getElementById("toLink").value;
+  let fromName = document.getElementById("anonymous").checked ? "Аноним" : document.getElementById("fromName").value;
+  let message = document.getElementById("message").value;
+  let color = document.querySelector('input[name="color"]:checked').value;
+  let font = document.getElementById("font").value;
 
-let htmlCode = `
+  let htmlCode = `
 [html]
 <style>
 .valentine{
@@ -237,22 +260,14 @@ color:#fff;
 [/html]
 `;
 
-document.getElementById("preview").innerHTML = `
-<div class="heart" style="background:${color}">
-<div class="heart-text" style="font-family:${font}">
-<a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
-</div>
-</div>
-`;
+  // отправка через emailjs
+  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+    subject: fromName + " → " + toName,
+    message: htmlCode
+  });
 
-emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
-subject: fromName + " → " + toName,
-message: htmlCode
-});
-
-alert("Валентинка упакована и отправлена!");
+  alert("Валентинка упакована и отправлена!");
 }
-
 </script>
 
 </body>
