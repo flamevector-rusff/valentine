@@ -2,94 +2,114 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Валентинка с маской</title>
+<title>Валентинка</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
-body {
+body{
   margin:0;
   padding:40px;
   font-family:'Cinzel', serif;
   background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
 }
 
-.form-wrapper {
+.container{
+  display:flex;
+  gap:40px;
+}
+
+.form-wrapper{
   width:500px;
   padding:25px;
   backdrop-filter:blur(12px);
-  background:rgba(255,255,255,0.2);
+  background:rgba(255,255,255,0.25);
   border-radius:20px;
   box-shadow:0 0 30px rgba(0,0,0,0.2);
 }
 
-input, textarea, select {
+input, textarea, select{
   width:100%;
   margin-bottom:10px;
   padding:8px;
   font-family:'Cinzel', serif;
 }
 
-textarea {
+textarea{
   resize:none;
-  height:120px;
-  margin-bottom:5px;
-  padding:8px;
+  height:130px;
 }
 
-.container {
+.checkbox-row{
   display:flex;
-  gap:40px;
+  align-items:center;
+  gap:8px;
+  margin-bottom:10px;
 }
 
-.preview {
+.color-option{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.color-box{
+  width:20px;
+  height:20px;
+  border:1px solid #000;
+}
+
+.counter{
+  font-size:12px;
+  text-align:right;
+  margin-bottom:10px;
+  color:#333;
+}
+
+button{
+  display:block;
+  margin:10px auto 0;
+  padding:10px 25px;
+  font-family:'Cinzel', serif;
+  cursor:pointer;
+}
+
+/* ===== Превью ===== */
+
+.preview{
   width:600px;
   height:600px;
   border:5px solid #000;
   position:relative;
   overflow:hidden;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
 }
 
-.heart-wrapper {
+.heart-wrapper{
   position:relative;
-  width:600px;
-  height:600px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-  .heart-img {
   width:100%;
   height:100%;
-  object-fit:contain; /* масштабируем по квадрату без обрезки */
-  display:block;
 }
-/* Цветной overlay только на сердце через маску */
-.heart-color {
+
+/* само сердце */
+.heart-base{
   position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  mix-blend-mode:multiply;
-  -webkit-mask-image: url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png');
-  mask-image: url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png');
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
-  -webkit-mask-size:contain;
-  mask-size:contain;
-  -webkit-mask-position:center;
-  mask-position:center;
+  inset:0;
+  background:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
 }
 
-/* Основной текст */
-.heart-text {
+/* цвет накладывается ТОЛЬКО на сердце */
+.heart-color{
+  position:absolute;
+  inset:0;
+  background:red;
+  -webkit-mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
+  mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
+}
+
+/* текст в центре */
+.heart-text{
   position:absolute;
   top:50%;
   left:50%;
@@ -101,62 +121,30 @@ textarea {
   word-wrap:break-word;
 }
 
-/* Подпись внизу справа */
-.heart-signature {
+/* подпись */
+.heart-signature{
   position:absolute;
-  bottom:15px;
-  right:15px;
-  color:black;      /* теперь черный */
-  font-weight:bold; /* жирный */
+  bottom:20px;
+  right:20px;
+  color:black;
+  font-weight:bold;
   font-size:16px;
-}
-
-.checkbox-row {
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.color-option {
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-
-.color-box {
-  width:20px;
-  height:20px;
-  border:1px solid #000;
-}
-
-.counter {
-  font-size:12px;
-  text-align:right;
-  margin-bottom:10px;
-  color:#333;
-}
-
-button {
-  display:block;
-  margin:10px auto 0;
-  padding:10px 25px;
-  font-family:'Cinzel', serif;
-  cursor:pointer;
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <div class="form-wrapper">
+
 <label>Кому (имя + ссылка)</label>
-<input type="text" id="toName" placeholder="Имя">
-<input type="text" id="toLink" placeholder="Ссылка на профиль">
+<input type="text" id="toName">
+<input type="text" id="toLink">
 
 <div class="checkbox-row">
-  <label for="anonymous">Анонимно</label>
+  <label>Анонимно</label>
   <input type="checkbox" id="anonymous">
 </div>
 
@@ -164,10 +152,10 @@ button {
 <input type="text" id="fromName">
 
 <label>Пожелание</label>
-<textarea id="message" maxlength="200" placeholder="Введите поздравление"></textarea>
+<textarea id="message" maxlength="200"></textarea>
 <div class="counter" id="charCount">0 / 200</div>
 
-<label>Цвет валентинки</label>
+<label>Цвет</label>
 <div class="checkbox-row">
   <div class="color-option">
     <input type="radio" name="color" value="#CD4A4C" checked>
@@ -177,7 +165,6 @@ button {
     <input type="radio" name="color" value="#8B0000">
     <div class="color-box" style="background:#8B0000;"></div>
   </div>
-  <!-- Добавляй новые цвета здесь -->
 </div>
 
 <label>Шрифт</label>
@@ -185,11 +172,11 @@ button {
   <option value="'Cinzel', serif" style="font-family:'Cinzel'">Cinzel</option>
   <option value="Georgia, serif" style="font-family:Georgia">Georgia</option>
   <option value="Times New Roman, serif" style="font-family:'Times New Roman'">Times New Roman</option>
-  <!-- Добавляй новые шрифты здесь -->
 </select>
 
 <button onclick="showPreview()">Посмотреть Валентинку</button>
 <button onclick="generate()">Упаковать Валентинку</button>
+
 </div>
 
 <div class="preview" id="preview"></div>
@@ -201,82 +188,55 @@ button {
   emailjs.init("YOUR_PUBLIC_KEY");
 })();
 
-const messageEl = document.getElementById("message");
-const toNameEl = document.getElementById("toName");
-const fromNameEl = document.getElementById("fromName");
-const charCount = document.getElementById("charCount");
-const MAX_CHARS = 200;
+const MAX = 200;
+const toName = document.getElementById("toName");
+const message = document.getElementById("message");
+const counter = document.getElementById("charCount");
+const fromName = document.getElementById("fromName");
 
 document.getElementById("anonymous").addEventListener("change", function(){
-  fromNameEl.disabled = this.checked;
-  if(this.checked) fromNameEl.value = "Аноним";
-  else fromNameEl.value = "";
-  updateCharCount();
+  fromName.disabled = this.checked;
+  if(this.checked) fromName.value = "Аноним";
+  else fromName.value = "";
 });
 
-function updateCharCount() {
-  let total = toNameEl.value.length + messageEl.value.length;
-  if(total >= MAX_CHARS){
-    messageEl.value = messageEl.value.substring(0, MAX_CHARS - toNameEl.value.length);
-    total = MAX_CHARS;
+function updateCounter(){
+  let total = toName.value.length + message.value.length;
+  if(total > MAX){
+    message.value = message.value.substring(0, MAX - toName.value.length);
+    total = MAX;
   }
-  charCount.textContent = `${total} / ${MAX_CHARS}`;
-  charCount.style.color = total >= MAX_CHARS ? 'red' : '#333';
+  counter.textContent = total + " / " + MAX;
+  counter.style.color = total >= MAX ? "red" : "#333";
 }
 
-messageEl.addEventListener("input", updateCharCount);
-toNameEl.addEventListener("input", updateCharCount);
+toName.addEventListener("input", updateCounter);
+message.addEventListener("input", updateCounter);
 
 function showPreview(){
-  const toName = toNameEl.value;
-  const toLink = document.getElementById("toLink").value;
-  const message = messageEl.value;
   const color = document.querySelector('input[name="color"]:checked').value;
   const font = document.getElementById("font").value;
-  const fromName = document.getElementById("anonymous").checked ? "Аноним" : fromNameEl.value;
+  const from = document.getElementById("anonymous").checked ? "Аноним" : fromName.value;
 
   document.getElementById("preview").innerHTML = `
-  <div class="heart-wrapper">
-    <img src="https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png" class="heart-img">
-    <div class="heart-color" style="background:${color};"></div>
-    <div class="heart-text" style="font-family:${font}">
-      <a href="${toLink}">${toName}</a>, ${message.toLowerCase()}
+    <div class="heart-wrapper">
+      <div class="heart-base"></div>
+      <div class="heart-color" style="background:${color}"></div>
+      <div class="heart-text" style="font-family:${font}">
+        <a href="${document.getElementById("toLink").value}" style="color:white;text-decoration:none;">
+        ${toName.value}</a>, ${message.value.toLowerCase()}
+      </div>
+      <div class="heart-signature" style="font-family:${font}">
+        с любовью, ${from}
+      </div>
     </div>
-    <div class="heart-signature" style="font-family:${font}">с любовью, ${fromName}</div>
-  </div>
   `;
 }
 
 function generate(){
-  const toName = toNameEl.value;
-  const toLink = document.getElementById("toLink").value;
-  const fromName = document.getElementById("anonymous").checked ? "Аноним" : fromNameEl.value;
-  const message = messageEl.value;
-  const color = document.querySelector('input[name="color"]:checked').value;
-  const font = document.getElementById("font").value;
-
-  const htmlCode = `
-[html]
-<div style="width:600px;height:600px;position:relative;background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');background-size:cover;">
-  <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:${color};-webkit-mask-image:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png');mask-image:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png');-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:contain;mask-size:contain;-webkit-mask-position:center;mask-position:center;mix-blend-mode:multiply;"></div>
-  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:420px;text-align:center;color:white;font-family:${font};">
-    <a href="${toLink}" style="color:white;text-decoration:none;">${toName}</a>, ${message.toLowerCase()}
-  </div>
-  <div style="position:absolute;bottom:15px;right:15px;color:white;font-family:${font};font-size:16px;">
-    с любовью, ${fromName}
-  </div>
-</div>
-[/html]
-  `;
-
-  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
-    subject: fromName + " → " + toName,
-    message: htmlCode
-  });
-
-  alert("Валентинка упакована и отправлена!");
+  alert("EmailJS подключи — код готов к отправке 😉");
 }
 </script>
+
 </body>
 </html>
-
