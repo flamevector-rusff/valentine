@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Валентинка</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
@@ -72,7 +71,7 @@ textarea{
 
 .checkbox-row{
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   gap:8px;
   margin-bottom:10px;
 }
@@ -274,7 +273,7 @@ function showPreview(){
       <div class="heart-base"></div>
       <div class="heart-color" style="background:${color}"></div>
       <div class="heart-text" style="font-family:${font}">
-        <a href="${document.getElementById("toLink").value}" style="color:white;text-decoration:none;">
+        <a href="${document.getElementById("toLink").value}" style="color:white;text-decoration:underline;cursor:pointer;">
         ${toName.value}</a>, ${message.value.toLowerCase()}
       </div>
       <div class="heart-signature" style="font-family:${font}">
@@ -291,6 +290,7 @@ function generate(){
 
 </body>
 </html>
+
 
 
 
