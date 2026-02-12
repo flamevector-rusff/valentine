@@ -8,160 +8,165 @@
 
 <style>
   @font-face {
-  font-family: 'Cinzel';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/cinzel_regular.ttf') format('truetype');
-}
+    font-family: 'Cinzel';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/cinzel_regular.ttf') format('truetype');
+  }
 
   @font-face {
-  font-family: 'Atziluth Script';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Atziluth-Script_1.ttf') format('truetype');
-}
+    font-family: 'Atziluth Script';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Atziluth-Script_1.ttf') format('truetype');
+  }
 
-@font-face {
-  font-family: 'Belarus';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Belarus-Regular(%2Bbel).otf') format('opentype');
-}
+  @font-face {
+    font-family: 'Belarus';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Belarus-Regular(%2Bbel).otf') format('opentype');
+  }
 
-@font-face {
-  font-family: 'Blast Black Hollow';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Blast%20Black%20Hollow.otf') format('opentype');
-}
+  @font-face {
+    font-family: 'Blast Black Hollow';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/Blast%20Black%20Hollow.otf') format('opentype');
+  }
 
-@font-face {
-  font-family: 'SK Nigar RUS';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/SKNigarRUS.otf') format('opentype');
-}
+  @font-face {
+    font-family: 'SK Nigar RUS';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/SKNigarRUS.otf') format('opentype');
+  }
 
-@font-face {
-  font-family: 'Tarbarsam Medium';
-  src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/tarbarsam%20%D0%81%20Medium.ttf') format('truetype');
-}
+  @font-face {
+    font-family: 'Tarbarsam Medium';
+    src: url('https://raw.githubusercontent.com/flamevector-rusff/valentine/main/tarbarsam%20%D0%81%20Medium.ttf') format('truetype');
+  }
+
+  body{
+    margin:0;
+    padding:40px;
+    font-family:'Cinzel', serif;
+    background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
+  }
+
+  .container{
+    display:flex;
+    gap:40px;
+  }
+
+  .form-wrapper{
+    width:500px;
+    padding:25px;
+    backdrop-filter:blur(12px);
+    background:rgba(255,255,255,0.25);
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(0,0,0,0.2);
+  }
+
+  input, textarea, select{
+    width:100%;
+    margin-bottom:10px;
+    padding:8px;
+    font-family:'Cinzel', serif;
+  }
+
+  textarea{
+    resize:none;
+    height:130px;
+  }
+
+  /* ===== Чекбокс рядом с текстом ===== */
+  .checkbox-row{
+    display:flex;
+    align-items:center; /* текст и чекбокс на одном уровне */
+    gap:8px;
+    margin-bottom:10px;
+  }
+
+  .color-option{
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+
+  .color-box{
+    width:20px;
+    height:20px;
+    border:1px solid #000;
+  }
+
+  .counter{
+    font-size:12px;
+    text-align:right;
+    margin-bottom:10px;
+    color:#333;
+  }
+
+  button{
+    display:block;
+    margin:10px auto 0;
+    padding:10px 25px;
+    font-family:'Cinzel', serif;
+    cursor:pointer;
+  }
+
+  /* ===== Превью ===== */
+
+  .preview{
+    width:600px;
+    height:600px;
+    border:5px solid #000;
+    position:relative;
+    overflow:hidden;
+    background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
+  }
+
+  .heart-wrapper{
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+
+  .heart-base{
+    position:absolute;
+    inset:0;
+    background:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
+  }
+
+  .heart-color{
+    position:absolute;
+    inset:0;
+    background:red;
+    -webkit-mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
+    mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
+  }
+
+  .heart-text{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:360px;
+    text-align:center;
+    color:white;
+    font-size:24px;
+    word-wrap:break-word;
+  }
+
+  .heart-text a{
+    text-decoration:underline;
+    cursor:pointer;
+    color:white;
+  }
 
   .heart-text a:hover{
-  opacity:0.8;
-}
-body{
-  margin:0;
-  padding:40px;
-  font-family:'Cinzel', serif;
-  background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
-}
+    opacity:0.8;
+  }
 
-.container{
-  display:flex;
-  gap:40px;
-}
+  .heart-signature{
+    position:absolute;
+    bottom:20px;
+    right:20px;
+    color:black;
+    font-weight:bold;
+    font-size:16px;
+  }
 
-.form-wrapper{
-  width:500px;
-  padding:25px;
-  backdrop-filter:blur(12px);
-  background:rgba(255,255,255,0.25);
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(0,0,0,0.2);
-}
-
-input, textarea, select{
-  width:100%;
-  margin-bottom:10px;
-  padding:8px;
-  font-family:'Cinzel', serif;
-}
-
-textarea{
-  resize:none;
-  height:130px;
-}
-
-.checkbox-row{
-  display:flex;
-  align-items:flex-start;
-  gap:8px;
-  margin-bottom:10px;
-}
-
-.color-option{
-  display:flex;
-  align-items:center;
-  gap:5px;
-}
-
-.color-box{
-  width:20px;
-  height:20px;
-  border:1px solid #000;
-}
-
-.counter{
-  font-size:12px;
-  text-align:right;
-  margin-bottom:10px;
-  color:#333;
-}
-
-button{
-  display:block;
-  margin:10px auto 0;
-  padding:10px 25px;
-  font-family:'Cinzel', serif;
-  cursor:pointer;
-}
-
-/* ===== Превью ===== */
-
-.preview{
-  width:600px;
-  height:600px;
-  border:5px solid #000;
-  position:relative;
-  overflow:hidden;
-  background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');
-}
-
-.heart-wrapper{
-  position:relative;
-  width:100%;
-  height:100%;
-}
-
-/* само сердце */
-.heart-base{
-  position:absolute;
-  inset:0;
-  background:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
-}
-
-/* цвет накладывается ТОЛЬКО на сердце */
-.heart-color{
-  position:absolute;
-  inset:0;
-  background:red;
-  -webkit-mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
-  mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;
-}
-
-/* текст в центре */
-.heart-text{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  width:360px;
-  text-align:center;
-  color:white;
-  font-size:24px;
-  word-wrap:break-word;
-}
-
-/* подпись */
-.heart-signature{
-  position:absolute;
-  bottom:20px;
-  right:20px;
-  color:black;
-  font-weight:bold;
-  font-size:16px;
-}
 </style>
 </head>
 
@@ -176,7 +181,7 @@ button{
 <input type="text" id="toLink">
 
 <div class="checkbox-row">
-  <label>Анонимно</label>
+  <label for="anonymous">Анонимно</label>
   <input type="checkbox" id="anonymous">
 </div>
 
@@ -275,7 +280,8 @@ function showPreview(){
       <div class="heart-color" style="background:${color}"></div>
       <div class="heart-text" style="font-family:${font}">
         <a href="${document.getElementById("toLink").value}" style="color:white;text-decoration:underline;cursor:pointer;">
-        ${toName.value}</a>, ${message.value.toLowerCase()}
+          ${toName.value}
+        </a>, ${message.value.toLowerCase()}
       </div>
       <div class="heart-signature" style="font-family:${font}">
         с любовью, ${from}
@@ -285,17 +291,35 @@ function showPreview(){
 }
 
 function generate(){
-  alert("EmailJS подключи — код готов к отправке 😉");
+  const color = document.querySelector('input[name="color"]:checked').value;
+  const font = document.getElementById("font").value;
+  const from = document.getElementById("anonymous").checked ? "Аноним" : fromName.value;
+  const to = toName.value;
+  const toLink = document.getElementById("toLink").value;
+  const msg = message.value.toLowerCase();
+
+  const htmlCode = `
+[html]
+<div style="width:600px;height:600px;position:relative;background:url('https://cdn.vectorstock.com/i/preview-1x/61/14/valentine-s-day-seamless-pattern-with-hand-drawn-vector-45896114.jpg');background-size:cover;">
+  <div style="position:absolute;inset:0;background:${color};-webkit-mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;mask:url('https://www.clipartbest.com/cliparts/nTX/8Rk/nTX8Rkdac.png') center/contain no-repeat;"></div>
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:360px;text-align:center;color:white;font-family:${font};font-size:24px;">
+    <a href="${toLink}" style="color:white;text-decoration:underline;cursor:pointer;">${to}</a>, ${msg}
+  </div>
+  <div style="position:absolute;bottom:20px;right:20px;color:black;font-weight:bold;font-family:${font};font-size:16px;">
+    с любовью, ${from}
+  </div>
+</div>
+[/html]
+  `;
+
+  emailjs.send("YOUR_SERVICE_ID","YOUR_TEMPLATE_ID",{
+    subject: `${from} → ${to}`,
+    message: htmlCode
+  });
+
+  alert("Валентинка упакована и отправлена на почту!");
 }
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
